@@ -1,1 +1,0 @@
-# Blog by Rex
