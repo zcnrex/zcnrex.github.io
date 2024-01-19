@@ -1,1 +1,1 @@
-# zcnrex.github.io
+# Blog by Rex
