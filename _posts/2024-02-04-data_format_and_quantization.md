@@ -5,14 +5,14 @@ date:   2024-02-04 18:18:42 +0000
 categories: quantization
 ---
 
-## Introduction
-What will be coverted in this post are
+# Introduction
+What will be covered in this post are
 1. Intro to different data types
 2. How to convert among different types
 3. How do they accelerate LLM
 
-## Section 1: Data Types
-# Bits and Bytes
+# Section 1: Data Types
+## Bits and Bytes
 First let's start from the very beginning: bits. Computers are machines that operate with 0's and 1's. Each 0 or 1 is one `bit`. These are the very basic building blocks of every computer program.
 
 1 higher level of abstraction is `byte`, which is 8 `bit`s.
@@ -22,19 +22,19 @@ First let's start from the very beginning: bits. Computers are machines that ope
 Modern computer architecture usually supports 64-bits, which means the chips move 64 `bits` at a time with their registers.
 {:/comment}
 
-# Integers
+## Integers
 Let's start with integers that are simpler to understand.
 
 1 `int` = 32 `bits` or 4 `bytes`. `01` and `10` in base 2 convert to `1` and `2` in base 10.
 
 | Integer    | n-bit Range | Note |
 | -------- | ------- | ----|
-| Unsigned  | [0, $$ 2^n $$ − 1] | |
+| Unsigned  | [0, $2^n$ − 1] | |
 | Sign-Magnitude  | [−$2^{(n-1)}$ − 1, $2^{(n-1)}$ − 1] | Both 000…00 and 100…00 represent 0|
 | Two's Complement  | [−$2^{(n-1)}$, $2^{(n-1)}$ − 1] | 000…00 represents 0, 100…00 represents -$2^{(n-1)}$|
 
 {::comment}
-{% highlight c++ %}
+{% highlight cpp %}
 int8_t
 int16_t
 int32_t
@@ -55,3 +55,39 @@ Base on the table, here are the range of common integer types supported in C++
 Check out the [Standard C++ data types][cpp-types].
 
 [cpp-types]: https://en.cppreference.com/w/cpp/header/cstdint
+
+## Floats
+Floats are much more interesting (and complicated) than integers. How do you represend 0.12345 with `0`'s and `1`'s?
+
+[IEEE 754](https://en.wikipedia.org/wiki/IEEE_754) has defined how to represent `float`s, using 16 bits, 32 bits... 256 bits. For the interest of this post, we will focuse on the full precision - 32 bits or `fp32`, and half precision - 16 bits or `fp16`.
+
+$Mantissa * Exponent$
+
+### FP32
+
+${(-1)}^{sign} * (1 + fraction) * 2^{exponent-127}$
+
+<br>
+Example
+{% include float32_example.xml %}
+
+<br>
+FP16 Example
+{% include float16_example.xml %}
+
+
+<br>
+BF16 Example
+{% include bf16_example.xml %}
+
+<br>
+FP8 E4M3 Example
+{% include bf16_example.xml %}
+
+
+<br>
+FP8 E5M2 Example
+{% include bf16_example.xml %}
+
+### Why should I care?
+It turns out that as we have much more complex models, the size and computation time significantly increase. For LLMs we are talking about trillions of parameters - the data type of these parameters would significantly affect the model size and computations speed.
