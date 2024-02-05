@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="390" height="75">
+	<style>
+		text {
+			font-size: 14px;
+			font-family: Arial, sans-serif;
+			text-anchor: middle;
+		}
+	</style>
+	<defs>
+		<g id="bit-0">
+			<rect width="15" height="26" stroke="#000"/>
+			<text x="8" y="18.3" fill="#000">0</text>
+		</g>
+		<g id="bit-1">
+			<rect width="15" height="26" stroke="#000"/>
+			<text x="8" y="18.3" fill="#000">1</text>
+		</g>
+	</defs>
+	
+	<g transform="translate(14.25,28.75)">
+		<use xlink:href="#bit-0" fill="#c5fcff"/>
+		<g fill="#9fffad">
+			<use xlink:href="#bit-0" x="15"/>
+			<use xlink:href="#bit-1" x="30"/>
+			<use xlink:href="#bit-1" x="45"/>
+			<use xlink:href="#bit-1" x="60"/>
+		</g>
+		<g fill="#ffaead">
+			<use xlink:href="#bit-1" x="75"/>
+			<use xlink:href="#bit-1" x="90"/>
+			<use xlink:href="#bit-0" x="105"/>
+		</g>
+		<g fill="none" stroke="#000" stroke-width="2">
+			<rect width="120" height="26"/>
+			<path d="m15,0 v26 M75,0 v26" fill="none" stroke="#000"/>
+		</g>
+		
+		<path d="m7.5,-3.5 v-9.5" stroke="#008080"/>
+		<path d="m16,-3.5 v-9.5 h58 v9.5" stroke="#008000" fill="none"/>
+		<path d="m76,-3.5 v-9.5 h43 v9.5" stroke="#800000" fill="none"/>
+		
+		<text y="-18">
+			<tspan x="8">S</tspan>
+			<tspan x="50">E4</tspan>
+			<tspan x="100">M3</tspan>
+		</text>
+		
+		<g transform="translate(0,30.5)" fill="#000">
+			<circle r="2" cx="7.5"/>
+			<circle r="2" cx="22.5"/>
+			<circle r="2" cx="67.5"/>
+			<circle r="2" cx="82.5"/>
+			<circle r="2" cx="112.5"/>
+		</g>
+		
+		<text y="45.5">
+			<tspan x="7.5">7</tspan>
+			<tspan x="25">6</tspan>
+			<tspan x="72.5">4</tspan>
+			<tspan x="85">3</tspan>
+			<tspan x="112.5">0</tspan>
+		</text>
+	</g>
+	
+	<text x="264" y="48.4" style="text-anchor: start; font-size: 18.7px;">= -1.75</text>
+</svg>

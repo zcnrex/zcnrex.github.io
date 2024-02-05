@@ -74,18 +74,21 @@
 			<circle r="2" cx="22.5"/>
 			<circle r="2" cx="127.5"/>
 			<circle r="2" cx="142.5"/>
+			<circle r="2" cx="157.5"/>
 			<circle r="2" cx="472.5"/>
 		</g>
 		
 		<text y="45.5">
-			<tspan x="6">31</tspan>
-			<tspan x="27">30</tspan>
-			<tspan x="126">23</tspan>
-			<tspan x="146">22</tspan>
-			<tspan x="472.5">0</tspan>
+			<tspan x="6">0</tspan>
+			<tspan x="27">2^8</tspan>
+			<tspan x="126">0</tspan>
+			<tspan x="142">1/2</tspan>
+			<tspan x="164">1/4</tspan>
+			<tspan x="472.5">1/2^23</tspan>
 		</text>
-		<text x="243" y="44.5">(bit index)</text>
+		<text x="243" y="44.5">(value)</text>
 	</g>
 	
 	<text x="504" y="48.4" style="text-anchor: start; font-size: 18.7px;">= 0.15625</text>
 </svg>
+
