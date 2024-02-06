@@ -1,23 +1,25 @@
 ---
 layout: post
-title:  "Numeric Data Types and Quantization"
+title:  "Numeric Data Types Part 1: Basics"
 date:   2024-02-04 18:18:42 +0000
-categories: quantization
+tags: quantization
 ---
 
-# Introduction
-What will be covered in this post are
-1. Intro to different data types
-2. How to convert among different types
-3. How do they accelerate LLM
+This post covers details of common numeric data types used in the modern deep learning models and large language models ([LLMs](https://arxiv.org/abs/1706.03762))
 
-# Numeric Data Types
+## Why should I care?
+As our models becoming more and more complex, the size and computation time significantly increase when we train and serve these models. For LLMs we are talking about trillions of parameters - the data type of these parameters would significantly affect the model size and computation speed.
+
+The process of converting higher precision numbers to lower precision, or changing from continuous or otherwise large set of values to a discrete set, is called __Quantization__. To truly understand quantization, we will start from how numbers are represented in machines behind every artificial intelligence.
+
+*Acknowledgement: Most of the content in this post are adapted from [http://efficientml.ai](http://efficientml.ai), a course by [Song Han](https://hanlab.mit.edu/songhan) whose lab created [StreamingLLM](https://hanlab.mit.edu/projects/streamingllm), [AWQ](https://hanlab.mit.edu/projects/awq), [SmoothQuant](https://hanlab.mit.edu/projects/smoothquant) and many other technics that largely improved the efficiency of large models.*
+
 ## Bits and Bytes
 First let's start from the very beginning: bits. Computers are machines that operate with 0's and 1's. Each 0 or 1 is one `bit`. These are the very basic building blocks of every computer program.
 
 1 higher level of abstraction is `byte`, which is 8 `bit`s.
 
-`bits` and `bytes` are not easily readable by human beings - our brains have a very small cache that only holds 4-7 pieces of concepts at a time. So we invent primitiv types, e.g. boolean, short, int, long, float, double, etc.
+`bits` and `bytes` are not easily readable by human beings - our brains have a very small cache that only holds 4-7 pieces of concepts at a time. So we invent primitive types, e.g. boolean, short, int, long, float, double, etc.
 {::comment}
 Modern computer architecture usually supports 64-bits, which means the chips move 64 `bits` at a time with their registers.
 {:/comment}
@@ -25,7 +27,7 @@ Modern computer architecture usually supports 64-bits, which means the chips mov
 ## Integers
 Let's start with integers that are simpler to understand.
 
-1 `int` = 32 `bits` or 4 `bytes`. `01` and `10` in base 2 convert to `1` and `2` in base 10.
+`01` and `10` in base 2 convert to `1` and `2` in base 10. 1 `int` = 32 `bits` or 4 `bytes`.
 
 | Integer    | n-bit Range | Note |
 | -------- | ------- | ----|
@@ -48,9 +50,9 @@ Base on the table, here are the range of common integer types supported in C++
 
 | Integer Type | Range |
 | -------- | ------- |
-| uint8_t | [0, 255] |
-| uint16_t | [0, 65,535] |
-| uint32_t | [0, 4,294,967,295] |
+| `uint8_t` | [0, 255] |
+| `uint16_t` | [0, 65,535] |
+| `uint32_t` | [0, 4,294,967,295] |
 
 Check out the [Standard C++ data types][cpp-types].
 
@@ -103,6 +105,15 @@ In this case
 - fraction = $$ (0100\ 0000\ ...)_2 = {1/4}_{10} = 0.25_{10} $$
 - total = $ 0.15625 = {(-1)}^0 * {(1 + 0.25)} * 2^{124-127} = 1 * 1.25 * 2^{-3} $
 
+#### Other numbers
+This is only half of the story - the equation above applies to "normal numbers". We also have subnormal numbers, $\pm \infty$ and $NaN$.
+
+| Exponent | Fraction = 0 | Fraction $\neq$ 0 | Equation |
+| - | - | - | - |
+| $00_H = 0$ | 0 | subnormal | ${(-1)}^{sign} * fraction * 2^{1-127}$|
+| $01_H ... FE_H = 1 ... 254 | normal | normal | ${(-1)}^{sign} * (1 + fraction) * 2^{exponent-127}$ |
+| FF_H = 255 | $\pm \infty $ | $NaN$ | - |
+
 ### FP16 
 [IEEE 754](https://standards.ieee.org/ieee/754/6210/) Half Precision 16-bit Float (FP16)
 
@@ -115,8 +126,10 @@ ${(-1)}^{sign} * (1 + fraction) * 2^{exponent-15}$
 \
 $ 3.0 = {(-1)}^0 * {(1 + 0.5)} * 2^{16-15} = 1 * 1.5 * 2^1 $
 
+The similar rules for subnormal numbers, $\pm \infty$ and $NaN$ also applies.
+
 ### BF16
-[Google](https://arxiv.org/pdf/1905.12322.pdf) Brain Float (BF16).
+[Google Brain Float](https://arxiv.org/pdf/1905.12322.pdf) (BF16).
 
 
 ${(-1)}^{sign} * (1 + fraction) * 2^{exponent-127}$
@@ -127,12 +140,16 @@ ${(-1)}^{sign} * (1 + fraction) * 2^{exponent-127}$
 \
 $ 40.5 = {(-1)}^0 * {(1 + 0.25 + 0.015625)} * 2^{132-127} = 1 * 1.265625 * 2^5 $
 
+Rules for subnormal numbers, $\pm \infty$ and $NaN$ are the same as FP32.
+
 ### FP8 E4M3
 [Nvidia](https://docs.nvidia.com/deeplearning/transformer-engine/user-guide/examples/fp8_primer.html) FP8 E4M3
 {% include numerics/fp8_e4m3.svg %}
 
 \
 $ -1.75 = {(-1)}^1 * {(1 + 0.5 + 0.25)} * 2^{7-7} = {(-1)} * 1.75 * 2^0 $
+
+FP8 E4M3 does not have $\infty$; $(S.1111.111)_2$ is used for $NaN$.
 
 ### FP8 E5M2
 [Nvidia](https://docs.nvidia.com/deeplearning/transformer-engine/user-guide/examples/fp8_primer.html) FP8 E5M2 is for gradient in the backward propagation
@@ -141,19 +158,14 @@ $ -1.75 = {(-1)}^1 * {(1 + 0.5 + 0.25)} * 2^{7-7} = {(-1)} * 1.75 * 2^0 $
 \
 $ 0.09375 = {(-1)}^0 * {(1 + 0.5)} * 2^{11-15} = 1 * 1.5 * 2^{-4} $
 
-### Comparison
+FP8 E5M2 have $\infty$ $(S.11111.00)_2$ and $NaN$ $(S.11111.XX)_2$.
 
-| FP Precision | Exponent (bits) | Fraction (bits) | Total (bits) | Dynamic Range | Precision |
-| -------- | ------- | ---- | ---- | ---- | ---- |
-| FP32 | 8 | 23 | 32 | | |
-| FP16 | 5 | 10 | 16 | | |
-| BF16 | 8 | 7 | 16 | | |
-| FP8 E4M3 | 4 | 3 | 8 | +/-448 | |
-| FP8 E5M2 | 5 | 2 | 8 | +/-57344 | |
+### Summary
 
-### Why should I care?
-It turns out that as we have much more complex models, the size and computation time significantly increase. For LLMs we are talking about trillions of parameters - the data type of these parameters would significantly affect the model size and computations speed.
-
-
-# Quantization
-The process of converting higher precision numbers to lower precision, or changing from continuous or otherwise large set of values to a discrete set, is called __Quantization__
+| FP Precision | Exponent (bits) | Fraction (bits) | Total (bits) | Normal Range | $\pm \infty$ | $NaN$ |
+| -------- | ------- | ---- | ---- | ---- |
+| FP32 | 8 | 23 | 32 | $\pm 3 * 10^{38}$ | Y | Y |
+| FP16 | 5 | 10 | 16 | $\pm 65504$ | Y | Y |
+| BF16 | 8 | 7 | 16 | $\pm 3 * 10^{38}$ | Y | Y |
+| FP8 E4M3 | 4 | 3 | 8 | $\pm 448$ | N | Y |
+| FP8 E5M2 | 5 | 2 | 8 | $\pm 57344$ | Y | Y |

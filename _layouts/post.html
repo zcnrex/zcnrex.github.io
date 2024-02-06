@@ -24,6 +24,12 @@ layout: base
             {%- if forloop.last == false %}, {% endif -%}
         {% endfor %}
       {%- endif -%}</p>
+      <span>Tags: 
+        {% for tag in page.tags %}
+          {% capture tag_name %}{{ tag }}{% endcapture %}
+          <nobr>{{tag_name}}&nbsp;</nobr>
+        {% endfor %}
+      </span>
   </header>
 
   <div class="post-content e-content" itemprop="articleBody">
