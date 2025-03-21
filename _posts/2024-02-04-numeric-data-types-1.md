@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Numeric Data Types Part 1: Basics"
+title:  "Low Precision Numeric Data Types"
 date:   2024-02-04 18:18:42 +0000
 tags: quantization
 ---
@@ -73,7 +73,7 @@ Example style
 {: style="color:gray; font-size: 80%; text-align: center;"}
 {:/comment}
 
-In IEEE 754, $mantissa = (1 + fraction)$, and $exponent = 2^{exponent}$. 
+In IEEE 754, $mantissa = (1 + fraction)$, and $exponent = 2^{exponent}$.
 
 Let's take a deeper look into different precisions.
 
@@ -87,7 +87,7 @@ Let's take a deeper look into different precisions.
 <br>
 - 1 bit sign
 - 8 bits exponent: 30th bit is $2^8 = 128$, 29th bit = $64$ ...
-- 23 bits fraction/mantissa: 22th bit = $1/2 = 0.5$, 21th bit = $1/2^2 = 0.25$, ... 
+- 23 bits fraction/mantissa: 22th bit = $1/2 = 0.5$, 21th bit = $1/2^2 = 0.25$, ...
 - The final number in base 10:
 
 ${(-1)}^{sign} * (1 + fraction) * 2^{exponent-127}$
@@ -114,7 +114,7 @@ This is only half of the story - the equation above applies to "normal numbers".
 | $01_H ... FE_H = 1 ... 254 | normal | normal | ${(-1)}^{sign} * (1 + fraction) * 2^{exponent-127}$ |
 | FF_H = 255 | $\pm \infty $ | $NaN$ | - |
 
-### FP16 
+### FP16
 [IEEE 754](https://standards.ieee.org/ieee/754/6210/) Half Precision 16-bit Float (FP16)
 
 
