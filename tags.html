@@ -1,0 +1,50 @@
+---
+layout: base
+title: Tags
+permalink: /tags/
+---
+
+<div class="tags-page">
+  <h1 class="page-heading">Posts by Tag</h1>
+
+  <div class="tag-cloud">
+    {% assign all_tags = site.posts | map: "tags" | join: ',' | split: ',' | uniq | sort %}
+    {% for tag in all_tags %}
+      {% if tag != "" %}
+        {% assign tag_count = 0 %}
+        {% for post in site.posts %}
+          {% if post.tags contains tag %}
+            {% assign tag_count = tag_count | plus: 1 %}
+          {% endif %}
+        {% endfor %}
+        <a href="#{{ tag | slugify }}" class="tag-pill">
+          {{ tag }}<span class="tag-count">{{ tag_count }}</span>
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <div class="tag-sections">
+    {% for tag in all_tags %}
+      {% if tag != "" %}
+        <section class="tag-section" id="{{ tag | slugify }}">
+          <h2 class="tag-heading">
+            <span class="tag-icon">#</span>{{ tag }}
+          </h2>
+          <ul class="tag-post-list">
+            {% assign date_format = site.minima.date_format | default: "%b %-d, %Y" %}
+            {% for post in site.posts %}
+              {% if post.tags contains tag %}
+                <li class="tag-post-item">
+                  <span class="post-meta">{{ post.date | date: date_format }}</span>
+                  <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </section>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
