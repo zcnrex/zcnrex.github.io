@@ -1,1 +1,41 @@
-// Placeholder to allow overriding predefined variables smoothly.
+// Custom Variables - Code-friendly Light Theme
+// Overriding predefined variables for better code display
+
+// Typography
+$base-font-family: "Source Sans 3", "Segoe UI", system-ui, -apple-system, sans-serif;
+$code-font-family: "JetBrains Mono", "Fira Code", "SF Mono", "Cascadia Code", "Menlo", "Consolas", monospace;
+$base-font-size: 17px;
+$base-line-height: 1.7;
+
+// Content width - slightly wider for code
+$content-width: 880px;
+
+// Colors - Warm light theme inspired by paper/cream
+$lm-background-color: #fafaf8;
+$lm-text-color: #2d3142;
+$lm-brand-color: #6b7280;
+$lm-brand-color-light: #d1d5db;
+$lm-brand-color-dark: #374151;
+
+// Code block colors - GitHub-inspired light theme
+$lm-code-background-color: #f6f8fa;
+
+// Links - subtle teal accent
+$lm-link-base-color: #0969da;
+$lm-link-visited-color: #6639ba;
+$lm-link-hover-color: #0550ae;
+
+// Site title
+$lm-site-title-color: #1f2937;
+
+// Borders - softer
+$lm-border-color-01: #e5e7eb;
+$lm-border-color-02: #d1d5db;
+$lm-border-color-03: #374151;
+
+// Tables
+$lm-table-text-color: #374151;
+$lm-table-zebra-color: #f9fafb;
+$lm-table-header-bg-color: #f3f4f6;
+$lm-table-header-border: #d1d5db;
+$lm-table-border-color: #e5e7eb;
