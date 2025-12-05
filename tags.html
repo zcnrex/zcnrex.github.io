@@ -13,7 +13,8 @@ permalink: /tags/
       {% if tag != "" %}
         {% assign tag_count = 0 %}
         {% for post in site.posts %}
-          {% if post.tags contains tag %}
+          {% assign post_tags = post.tags | join: ',' | split: ',' %}
+          {% if post_tags contains tag %}
             {% assign tag_count = tag_count | plus: 1 %}
           {% endif %}
         {% endfor %}
@@ -34,7 +35,8 @@ permalink: /tags/
           <ul class="tag-post-list">
             {% assign date_format = site.minima.date_format | default: "%b %-d, %Y" %}
             {% for post in site.posts %}
-              {% if post.tags contains tag %}
+              {% assign post_tags = post.tags | join: ',' | split: ',' %}
+              {% if post_tags contains tag %}
                 <li class="tag-post-item">
                   <span class="post-meta">{{ post.date | date: date_format }}</span>
                   <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
