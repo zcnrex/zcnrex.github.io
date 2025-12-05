@@ -5,6 +5,7 @@
 $base-font-family: "Source Sans 3", "Segoe UI", system-ui, -apple-system, sans-serif;
 $code-font-family: "JetBrains Mono", "Fira Code", "SF Mono", "Cascadia Code", "Menlo", "Consolas", monospace;
 $base-font-size: 17px;
+$small-font-size: $base-font-size * 0.875; // Bug fix: recalculate based on new base font size
 $base-line-height: 1.7;
 
 // Content width - slightly wider for code

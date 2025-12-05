@@ -3,7 +3,31 @@
 // Fonts are loaded via _includes/custom-head.html for better performance
 
 // Root CSS variables for code colors
+// Also override minima theme colors here because the skin file (auto.scss) runs
+// before custom-variables.scss, so $lm-* overrides there have no effect on
+// the CSS custom properties that were already generated.
 :root {
+  // Minima theme color overrides (must be here, not in custom-variables.scss)
+  --minima-brand-color: #6b7280;
+  --minima-brand-color-light: #d1d5db;
+  --minima-brand-color-dark: #374151;
+  --minima-site-title-color: #1f2937;
+  --minima-text-color: #2d3142;
+  --minima-background-color: #fafaf8;
+  --minima-code-background-color: #f6f8fa;
+  --minima-link-base-color: #0969da;
+  --minima-link-visited-color: #6639ba;
+  --minima-link-hover-color: #0550ae;
+  --minima-border-color-01: #e5e7eb;
+  --minima-border-color-02: #d1d5db;
+  --minima-border-color-03: #374151;
+  --minima-table-text-color: #374151;
+  --minima-table-zebra-color: #f9fafb;
+  --minima-table-header-bg-color: #f3f4f6;
+  --minima-table-header-border: #d1d5db;
+  --minima-table-border-color: #e5e7eb;
+
+  // Code syntax highlighting colors
   --code-comment: #6a737d;
   --code-keyword: #cf222e;
   --code-string: #0a3069;
