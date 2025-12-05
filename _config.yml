@@ -28,6 +28,9 @@ url: "https://zcnrex.github.io/" # the base hostname & protocol for your site, e
 github_username:  zcnrex
 linkedin_username: chunanzeng
 
+# Google Analytics (GA4 Measurement ID)
+google_analytics: G-0B7TXFRTPD
+
 # Build settings
 theme: jekyll-theme-slate
 plugins:
